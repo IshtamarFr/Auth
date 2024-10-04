@@ -52,9 +52,9 @@ public class AuthController {
     }
 
     @PostMapping("/sendmemail/{address}")
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('ADMIN')")
     public void testSendMail(@PathVariable final String address) {
-        emailService.sendSimpleMessage(address,"Test message from RestStarter","Sending email from RestStarter WebApp works !");
+        emailService.sendSimpleMessage(address,"Test message from Auth","Sending email from Auth WebApp works !");
     }
 
     @Operation(summary = "register new user",responses={
