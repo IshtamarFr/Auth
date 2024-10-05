@@ -26,19 +26,24 @@ public class JwtService {
 
     public String generateToken(String userName) {
         Map<String, Object> claims = new HashMap<>();
-        return createToken(claims, userName);
+        return createToken(claims, userName, secret, lifespan);
     }
 
-    private String createToken(Map<String, Object> claims, String userName) {
+    public String generateToken(String userName, String secret,Long lifespan) {
+        Map<String, Object> claims = new HashMap<>();
+        return createToken(claims, userName, secret, lifespan);
+    }
+
+    private String createToken(Map<String, Object> claims, String userName, String secret,Long lifespan) {
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(userName)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + 60000 * lifespan))
-                .signWith(getSignKey(), SignatureAlgorithm.HS256).compact();
+                .signWith(getSignKey(secret), SignatureAlgorithm.HS256).compact();
     }
 
-    private Key getSignKey() {
+    private Key getSignKey(String secret) {
         byte[] keyBytes= Decoders.BASE64.decode(secret);
         return Keys.hmacShaKeyFor(keyBytes);
     }
